@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 .DS_store
+plots.zip
 
 # C extensions
 *.so
