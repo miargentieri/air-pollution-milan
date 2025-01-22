@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-s
+
 # subset to specific milan pm2.5 sensors
 # 17122 - Milano via Senato (PM2.5)
 # 20529 - Milano viale Marche (PM2.5)
@@ -93,7 +93,7 @@ def calculate_sensor_avg(data, pm_stations):
 
 
 
-def plot_air_quality_25_milan(data, city, start_date, end_date):
+def plot_air_quality_25_milan(data, city, start_date, end_date, save=False, annotation=True):
     UE_limit = 25
     WHO_limit = 15
 
@@ -112,36 +112,37 @@ def plot_air_quality_25_milan(data, city, start_date, end_date):
     days_above_alarm = filtered_data[filtered_data['Valore'] > 50].nunique()['Valore']
     days_above_OMS = filtered_data[filtered_data['Valore'] > WHO_limit].nunique()['Valore']
 
-    # Count number of days where in 2023
-    start_2023 = pd.to_datetime('01/01/2023').date()
-    end_2023 = pd.to_datetime('12/31/2023').date()
+    if annotation:
+        # Count number of days where in 2023
+        start_2023 = pd.to_datetime('01/01/2023').date()
+        end_2023 = pd.to_datetime('12/31/2023').date()
 
-    data_2023 = data[(data['date'] >= start_2023) & (data['date'] <= end_2023)]
-    days_above_EU_2023 = data_2023[data_2023['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2023 = data_2023[data_2023['Valore'] > 50].nunique()['Valore']
-    days_above_OMS_2023 = data_2023[data_2023['Valore'] > WHO_limit].nunique()['Valore']
+        data_2023 = data[(data['date'] >= start_2023) & (data['date'] <= end_2023)]
+        days_above_EU_2023 = data_2023[data_2023['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2023 = data_2023[data_2023['Valore'] > 50].nunique()['Valore']
+        days_above_OMS_2023 = data_2023[data_2023['Valore'] > WHO_limit].nunique()['Valore']
 
-    avg_2023 = data_2023['Valore'].mean()
+        avg_2023 = data_2023['Valore'].mean()
 
-    # Count number of days where in 2024
-    start_2024 = pd.to_datetime('01/01/2024').date()
-    end_2024 = pd.to_datetime('12/31/2024').date()
+        # Count number of days where in 2024
+        start_2024 = pd.to_datetime('01/01/2024').date()
+        end_2024 = pd.to_datetime('12/31/2024').date()
 
-    data_2024 = data[(data['date'] >= start_2024) & (data['date'] <= end_2024)]
-    days_above_EU_2024 = data_2024[data_2024['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2024 = data_2024[data_2024['Valore'] > 50].nunique()['Valore']
-    days_above_OMS_2024 = data_2024[data_2024['Valore'] > WHO_limit].nunique()['Valore']
+        data_2024 = data[(data['date'] >= start_2024) & (data['date'] <= end_2024)]
+        days_above_EU_2024 = data_2024[data_2024['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2024 = data_2024[data_2024['Valore'] > 50].nunique()['Valore']
+        days_above_OMS_2024 = data_2024[data_2024['Valore'] > WHO_limit].nunique()['Valore']
 
-    avg_2024 = data_2024['Valore'].mean()
+        avg_2024 = data_2024['Valore'].mean()
 
-    # Count number of days where in 2025
-    start_2025 = pd.to_datetime('01/01/2025').date()
-    end_2025 = pd.to_datetime('01/31/2025').date()
+        # Count number of days where in 2025
+        start_2025 = pd.to_datetime('01/01/2025').date()
+        end_2025 = pd.to_datetime('01/31/2025').date()
 
-    data_2025 = data[(data['date'] >= start_2025) & (data['date'] <= end_2025)]
-    days_above_EU_2025 = data_2025[data_2025['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2025 = data_2025[data_2025['Valore'] > 50].nunique()['Valore']
-    days_above_OMS_2025 = data_2025[data_2025['Valore'] > WHO_limit].nunique()['Valore']
+        data_2025 = data[(data['date'] >= start_2025) & (data['date'] <= end_2025)]
+        days_above_EU_2025 = data_2025[data_2025['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2025 = data_2025[data_2025['Valore'] > 50].nunique()['Valore']
+        days_above_OMS_2025 = data_2025[data_2025['Valore'] > WHO_limit].nunique()['Valore']
 
     # Calculate average value for each station
     average = filtered_data['Valore'].mean()
@@ -160,33 +161,6 @@ def plot_air_quality_25_milan(data, city, start_date, end_date):
     plt.axhline(y=UE_limit, color='gray', linestyle='--')
     plt.axhline(y=50, color='red', linestyle='--')
 
-    # if add_dates:
-    #     spring_fashion_start_man = pd.to_datetime('01/12/2024').date()
-    #     spring_fashion_end_man = pd.to_datetime('01/16/2024').date()
-
-    #     fall_fashion_start_man = pd.to_datetime('06/15/2024').date()
-    #     fall_fashion_end_man = pd.to_datetime('06/19/2024').date()
-
-    #     spring_fashion_start_woman = pd.to_datetime('02/20/2024').date()
-    #     spring_fashion_end_woman = pd.to_datetime('02/26/2024').date()
-
-    #     fall_fashion_start_woman = pd.to_datetime('09/18/2024').date()
-    #     fall_fashion_end_woman = pd.to_datetime('09/24/2024').date()
-
-    #     mobile_start = pd.to_datetime('04/16/2024').date()
-    #     mobile_end = pd.to_datetime('04/21/2024').date()
-
-    #     plt.axvline(x=spring_fashion_start_man, color='red', linestyle='--')
-    #     plt.axvline(x=spring_fashion_end_man, color='red', linestyle='--')
-    #     plt.axvline(x=fall_fashion_start_man, color='red', linestyle='--')
-    #     plt.axvline(x=fall_fashion_end_man, color='red', linestyle='--')
-    #     plt.axvline(x=spring_fashion_start_woman, color='red', linestyle='--')
-    #     plt.axvline(x=spring_fashion_end_woman, color='red', linestyle='--')
-    #     plt.axvline(x=fall_fashion_start_woman, color='red', linestyle='--')
-    #     plt.axvline(x=fall_fashion_end_woman, color='red', linestyle='--')
-    #     plt.axvline(x=mobile_start, color='red', linestyle='--')
-    #     plt.axvline(x=mobile_end, color='red', linestyle='--')
-
     plt.annotate(
         'Limite UE', 
         xy=(filtered_data['date'].iloc[110], UE_limit), 
@@ -203,21 +177,21 @@ def plot_air_quality_25_milan(data, city, start_date, end_date):
 
     plt.text(filtered_data['date'].iloc[90], 52, "Soglia proposta per l'allarme")
 
-    plt.text(filtered_data['date'].iloc[0], 80, f"Giorni sopra il limite OMS nel 2023: {days_above_OMS_2023}")
-    plt.text(filtered_data['date'].iloc[0], 85, f"Giorni sopra il limite UE nel 2023: {days_above_EU_2023}")
-    plt.text(filtered_data['date'].iloc[0], 90, f"Giorni sopra la soglia d'allarme nel 2023: {days_above_alarm_2023}")
+    if annotation:
+        plt.text(filtered_data['date'].iloc[0], 80, f"Giorni sopra il limite OMS nel 2023: {days_above_OMS_2023}")
+        plt.text(filtered_data['date'].iloc[0], 85, f"Giorni sopra il limite UE nel 2023: {days_above_EU_2023}")
+        plt.text(filtered_data['date'].iloc[0], 90, f"Giorni sopra la soglia d'allarme nel 2023: {days_above_alarm_2023}")
 
-    plt.text(filtered_data['date'].iloc[0], 100, f"Giorni sopra il limite OMS nel 2024: {days_above_OMS_2024}")
-    plt.text(filtered_data['date'].iloc[0], 105, f"Giorni sopra il limite UE nel 2024: {days_above_EU_2024}")
-    plt.text(filtered_data['date'].iloc[0], 110, f"Giorni sopra la soglia d'allarme nel 2024: {days_above_alarm_2024}")
+        plt.text(filtered_data['date'].iloc[0], 100, f"Giorni sopra il limite OMS nel 2024: {days_above_OMS_2024}")
+        plt.text(filtered_data['date'].iloc[0], 105, f"Giorni sopra il limite UE nel 2024: {days_above_EU_2024}")
+        plt.text(filtered_data['date'].iloc[0], 110, f"Giorni sopra la soglia d'allarme nel 2024: {days_above_alarm_2024}")
 
-    plt.text(filtered_data['date'].iloc[0], 120, f"Giorni sopra il limite OMS nel 2025: {days_above_OMS_2025}")
-    plt.text(filtered_data['date'].iloc[0], 125, f"Giorni sopra il limite UE nel 2025: {days_above_EU_2025}")
-    plt.text(filtered_data['date'].iloc[0], 130, f"Giorni sopra la soglia d'allarme nel 2025: {days_above_alarm_2025}")
+        plt.text(filtered_data['date'].iloc[0], 120, f"Giorni sopra il limite OMS nel 2025: {days_above_OMS_2025}")
+        plt.text(filtered_data['date'].iloc[0], 125, f"Giorni sopra il limite UE nel 2025: {days_above_EU_2025}")
+        plt.text(filtered_data['date'].iloc[0], 130, f"Giorni sopra la soglia d'allarme nel 2025: {days_above_alarm_2025}")
 
-    plt.text(filtered_data['date'].iloc[450], 105, f"Media di PM2.5 nel 2023: {avg_2023:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
-    plt.text(filtered_data['date'].iloc[450], 125, f"Media di PM2.5 nel 2024: {avg_2024:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
-
+        plt.text(filtered_data['date'].iloc[450], 105, f"Media di PM2.5 nel 2023: {avg_2023:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
+        plt.text(filtered_data['date'].iloc[450], 125, f"Media di PM2.5 nel 2024: {avg_2024:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
 
     plt.yticks(range(0, int(filtered_data['Valore'].max()) + 5, 5))
     plt.xticks(filtered_data['date'], rotation=45, ha='right', fontsize=8)
@@ -235,11 +209,12 @@ def plot_air_quality_25_milan(data, city, start_date, end_date):
     plt.ylabel('Concentrazione PM2.5 (µg/m³)')
     plt.title(f'Inquinamento PM2.5 a {city} ({start_date} - {end_date})', pad=10)
 
-    plt.show()
+    if save==False:
+        plt.show()
 
 
 
-def plot_air_quality_pm10_milan(data, city, start_date, end_date):
+def plot_air_quality_pm10_milan(data, city, start_date, end_date, save=False, annotation=True):
     UE_limit = 45
     WHO_limit = 45
     alarm_limit = 90
@@ -259,36 +234,37 @@ def plot_air_quality_pm10_milan(data, city, start_date, end_date):
     days_above_alarm = filtered_data[filtered_data['Valore'] > alarm_limit].nunique()['Valore']
     days_above_OMS = filtered_data[filtered_data['Valore'] > WHO_limit].nunique()['Valore']
 
-    # Count number of days where in 2023
-    start_2023 = pd.to_datetime('01/01/2023').date()
-    end_2023 = pd.to_datetime('12/31/2023').date()
+    if annotation:
+        # Count number of days where in 2023
+        start_2023 = pd.to_datetime('01/01/2023').date()
+        end_2023 = pd.to_datetime('12/31/2023').date()
 
-    data_2023 = data[(data['date'] >= start_2023) & (data['date'] <= end_2023)]
-    days_above_EU_2023 = data_2023[data_2023['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2023 = data_2023[data_2023['Valore'] > alarm_limit].nunique()['Valore']
-    days_above_OMS_2023 = data_2023[data_2023['Valore'] > WHO_limit].nunique()['Valore']
+        data_2023 = data[(data['date'] >= start_2023) & (data['date'] <= end_2023)]
+        days_above_EU_2023 = data_2023[data_2023['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2023 = data_2023[data_2023['Valore'] > alarm_limit].nunique()['Valore']
+        days_above_OMS_2023 = data_2023[data_2023['Valore'] > WHO_limit].nunique()['Valore']
 
-    avg_2023 = data_2023['Valore'].mean()
+        avg_2023 = data_2023['Valore'].mean()
 
-    # Count number of days where in 2024
-    start_2024 = pd.to_datetime('01/01/2024').date()
-    end_2024 = pd.to_datetime('12/31/2024').date()
+        # Count number of days where in 2024
+        start_2024 = pd.to_datetime('01/01/2024').date()
+        end_2024 = pd.to_datetime('12/31/2024').date()
 
-    data_2024 = data[(data['date'] >= start_2024) & (data['date'] <= end_2024)]
-    days_above_EU_2024 = data_2024[data_2024['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2024 = data_2024[data_2024['Valore'] > alarm_limit].nunique()['Valore']
-    days_above_OMS_2024 = data_2024[data_2024['Valore'] > WHO_limit].nunique()['Valore']
+        data_2024 = data[(data['date'] >= start_2024) & (data['date'] <= end_2024)]
+        days_above_EU_2024 = data_2024[data_2024['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2024 = data_2024[data_2024['Valore'] > alarm_limit].nunique()['Valore']
+        days_above_OMS_2024 = data_2024[data_2024['Valore'] > WHO_limit].nunique()['Valore']
 
-    avg_2024 = data_2024['Valore'].mean()
+        avg_2024 = data_2024['Valore'].mean()
 
-    # Count number of days where in 2025
-    start_2025 = pd.to_datetime('01/01/2025').date()
-    end_2025 = pd.to_datetime('01/31/2025').date()
+        # Count number of days where in 2025
+        start_2025 = pd.to_datetime('01/01/2025').date()
+        end_2025 = pd.to_datetime('01/31/2025').date()
 
-    data_2025 = data[(data['date'] >= start_2025) & (data['date'] <= end_2025)]
-    days_above_EU_2025 = data_2025[data_2025['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2025 = data_2025[data_2025['Valore'] > 50].nunique()['Valore']
-    days_above_OMS_2025 = data_2025[data_2025['Valore'] > WHO_limit].nunique()['Valore']
+        data_2025 = data[(data['date'] >= start_2025) & (data['date'] <= end_2025)]
+        days_above_EU_2025 = data_2025[data_2025['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2025 = data_2025[data_2025['Valore'] > 50].nunique()['Valore']
+        days_above_OMS_2025 = data_2025[data_2025['Valore'] > WHO_limit].nunique()['Valore']
 
     # Calculate average value for each station
     average = filtered_data['Valore'].mean()
@@ -323,20 +299,21 @@ def plot_air_quality_pm10_milan(data, city, start_date, end_date):
 
     plt.text(filtered_data['date'].iloc[90], 92, "Soglia proposta per l'allarme")
 
-    plt.text(filtered_data['date'].iloc[0], 120, f"Giorni sopra il limite OMS nel 2023: {days_above_OMS_2023}")
-    plt.text(filtered_data['date'].iloc[0], 125, f"Giorni sopra il limite UE nel 2023: {days_above_EU_2023}")
-    plt.text(filtered_data['date'].iloc[0], 130, f"Giorni sopra la soglia d'allarme nel 2023: {days_above_alarm_2023}")
+    if annotation:
+        plt.text(filtered_data['date'].iloc[0], 120, f"Giorni sopra il limite OMS nel 2023: {days_above_OMS_2023}")
+        plt.text(filtered_data['date'].iloc[0], 125, f"Giorni sopra il limite UE nel 2023: {days_above_EU_2023}")
+        plt.text(filtered_data['date'].iloc[0], 130, f"Giorni sopra la soglia d'allarme nel 2023: {days_above_alarm_2023}")
 
-    plt.text(filtered_data['date'].iloc[0], 140, f"Giorni sopra il limite OMS nel 2024: {days_above_OMS_2024}")
-    plt.text(filtered_data['date'].iloc[0], 145, f"Giorni sopra il limite UE nel 2024: {days_above_EU_2024}")
-    plt.text(filtered_data['date'].iloc[0], 150, f"Giorni sopra la soglia d'allarme nel 2024: {days_above_alarm_2024}")
+        plt.text(filtered_data['date'].iloc[0], 140, f"Giorni sopra il limite OMS nel 2024: {days_above_OMS_2024}")
+        plt.text(filtered_data['date'].iloc[0], 145, f"Giorni sopra il limite UE nel 2024: {days_above_EU_2024}")
+        plt.text(filtered_data['date'].iloc[0], 150, f"Giorni sopra la soglia d'allarme nel 2024: {days_above_alarm_2024}")
 
-    plt.text(filtered_data['date'].iloc[0], 160, f"Giorni sopra il limite OMS nel 2025: {days_above_OMS_2025}")
-    plt.text(filtered_data['date'].iloc[0], 165, f"Giorni sopra il limite UE nel 2025: {days_above_EU_2025}")
-    plt.text(filtered_data['date'].iloc[0], 170, f"Giorni sopra la soglia d'allarme nel 2025: {days_above_alarm_2025}")
+        plt.text(filtered_data['date'].iloc[0], 160, f"Giorni sopra il limite OMS nel 2025: {days_above_OMS_2025}")
+        plt.text(filtered_data['date'].iloc[0], 165, f"Giorni sopra il limite UE nel 2025: {days_above_EU_2025}")
+        plt.text(filtered_data['date'].iloc[0], 170, f"Giorni sopra la soglia d'allarme nel 2025: {days_above_alarm_2025}")
 
-    plt.text(filtered_data['date'].iloc[450], 145, f"Media di PM2.5 nel 2023: {avg_2023:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
-    plt.text(filtered_data['date'].iloc[450], 165, f"Media di PM2.5 nel 2024: {avg_2024:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
+        plt.text(filtered_data['date'].iloc[450], 145, f"Media di PM2.5 nel 2023: {avg_2023:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
+        plt.text(filtered_data['date'].iloc[450], 165, f"Media di PM2.5 nel 2024: {avg_2024:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
 
 
     plt.yticks(range(0, int(filtered_data['Valore'].max()) + 5, 5))
@@ -355,10 +332,11 @@ def plot_air_quality_pm10_milan(data, city, start_date, end_date):
     plt.ylabel('Concentrazione PM10 (µg/m³)')
     plt.title(f'Inquinamento PM10 a {city} ({start_date} - {end_date})', pad=10)
 
-    plt.show()
+    if save==False:
+        plt.show()
 
 
-def plot_air_quality_25_lombardia(data, city, start_date, end_date):
+def plot_air_quality_25_lombardia(data, city, start_date, end_date, save=False, annotation=True):
     UE_limit = 25
     WHO_limit = 15
 
@@ -377,36 +355,37 @@ def plot_air_quality_25_lombardia(data, city, start_date, end_date):
     days_above_alarm = filtered_data[filtered_data['Valore'] > 50].nunique()['Valore']
     days_above_OMS = filtered_data[filtered_data['Valore'] > WHO_limit].nunique()['Valore']
 
-    # Count number of days where in 2023
-    start_2023 = pd.to_datetime('01/01/2023').date()
-    end_2023 = pd.to_datetime('12/31/2023').date()
+    if annotation:
+        # Count number of days where in 2023
+        start_2023 = pd.to_datetime('01/01/2023').date()
+        end_2023 = pd.to_datetime('12/31/2023').date()
 
-    data_2023 = data[(data['date'] >= start_2023) & (data['date'] <= end_2023)]
-    days_above_EU_2023 = data_2023[data_2023['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2023 = data_2023[data_2023['Valore'] > 50].nunique()['Valore']
-    days_above_OMS_2023 = data_2023[data_2023['Valore'] > WHO_limit].nunique()['Valore']
+        data_2023 = data[(data['date'] >= start_2023) & (data['date'] <= end_2023)]
+        days_above_EU_2023 = data_2023[data_2023['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2023 = data_2023[data_2023['Valore'] > 50].nunique()['Valore']
+        days_above_OMS_2023 = data_2023[data_2023['Valore'] > WHO_limit].nunique()['Valore']
 
-    avg_2023 = data_2023['Valore'].mean()
+        avg_2023 = data_2023['Valore'].mean()
 
-    # Count number of days where in 2024
-    start_2024 = pd.to_datetime('01/01/2024').date()
-    end_2024 = pd.to_datetime('12/31/2024').date()
+        # Count number of days where in 2024
+        start_2024 = pd.to_datetime('01/01/2024').date()
+        end_2024 = pd.to_datetime('12/31/2024').date()
 
-    data_2024 = data[(data['date'] >= start_2024) & (data['date'] <= end_2024)]
-    days_above_EU_2024 = data_2024[data_2024['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2024 = data_2024[data_2024['Valore'] > 50].nunique()['Valore']
-    days_above_OMS_2024 = data_2024[data_2024['Valore'] > WHO_limit].nunique()['Valore']
+        data_2024 = data[(data['date'] >= start_2024) & (data['date'] <= end_2024)]
+        days_above_EU_2024 = data_2024[data_2024['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2024 = data_2024[data_2024['Valore'] > 50].nunique()['Valore']
+        days_above_OMS_2024 = data_2024[data_2024['Valore'] > WHO_limit].nunique()['Valore']
 
-    avg_2024 = data_2024['Valore'].mean()
+        avg_2024 = data_2024['Valore'].mean()
 
-    # Count number of days where in 2025
-    start_2025 = pd.to_datetime('01/01/2025').date()
-    end_2025 = pd.to_datetime('01/31/2025').date()
+        # Count number of days where in 2025
+        start_2025 = pd.to_datetime('01/01/2025').date()
+        end_2025 = pd.to_datetime('01/31/2025').date()
 
-    data_2025 = data[(data['date'] >= start_2025) & (data['date'] <= end_2025)]
-    days_above_EU_2025 = data_2025[data_2025['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2025 = data_2025[data_2025['Valore'] > 50].nunique()['Valore']
-    days_above_OMS_2025 = data_2025[data_2025['Valore'] > WHO_limit].nunique()['Valore']
+        data_2025 = data[(data['date'] >= start_2025) & (data['date'] <= end_2025)]
+        days_above_EU_2025 = data_2025[data_2025['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2025 = data_2025[data_2025['Valore'] > 50].nunique()['Valore']
+        days_above_OMS_2025 = data_2025[data_2025['Valore'] > WHO_limit].nunique()['Valore']
 
     # Calculate average value for each station
     average = filtered_data['Valore'].mean()
@@ -416,7 +395,7 @@ def plot_air_quality_25_lombardia(data, city, start_date, end_date):
     plt.plot(
         filtered_data['date'], 
         filtered_data['Valore'],
-        label=f'ARPA (media di 3 stazioni)',
+        label=f'ARPA (media di 41 stazioni)',
         linewidth=3
     )
 
@@ -424,33 +403,6 @@ def plot_air_quality_25_lombardia(data, city, start_date, end_date):
     plt.axhline(y=WHO_limit, color='black', linestyle='--')
     plt.axhline(y=UE_limit, color='gray', linestyle='--')
     plt.axhline(y=50, color='red', linestyle='--')
-
-    # if add_dates:
-    #     spring_fashion_start_man = pd.to_datetime('01/12/2024').date()
-    #     spring_fashion_end_man = pd.to_datetime('01/16/2024').date()
-
-    #     fall_fashion_start_man = pd.to_datetime('06/15/2024').date()
-    #     fall_fashion_end_man = pd.to_datetime('06/19/2024').date()
-
-    #     spring_fashion_start_woman = pd.to_datetime('02/20/2024').date()
-    #     spring_fashion_end_woman = pd.to_datetime('02/26/2024').date()
-
-    #     fall_fashion_start_woman = pd.to_datetime('09/18/2024').date()
-    #     fall_fashion_end_woman = pd.to_datetime('09/24/2024').date()
-
-    #     mobile_start = pd.to_datetime('04/16/2024').date()
-    #     mobile_end = pd.to_datetime('04/21/2024').date()
-
-    #     plt.axvline(x=spring_fashion_start_man, color='red', linestyle='--')
-    #     plt.axvline(x=spring_fashion_end_man, color='red', linestyle='--')
-    #     plt.axvline(x=fall_fashion_start_man, color='red', linestyle='--')
-    #     plt.axvline(x=fall_fashion_end_man, color='red', linestyle='--')
-    #     plt.axvline(x=spring_fashion_start_woman, color='red', linestyle='--')
-    #     plt.axvline(x=spring_fashion_end_woman, color='red', linestyle='--')
-    #     plt.axvline(x=fall_fashion_start_woman, color='red', linestyle='--')
-    #     plt.axvline(x=fall_fashion_end_woman, color='red', linestyle='--')
-    #     plt.axvline(x=mobile_start, color='red', linestyle='--')
-    #     plt.axvline(x=mobile_end, color='red', linestyle='--')
 
     plt.annotate(
         'Limite UE', 
@@ -468,20 +420,21 @@ def plot_air_quality_25_lombardia(data, city, start_date, end_date):
 
     plt.text(filtered_data['date'].iloc[90], 52, "Soglia proposta per l'allarme")
 
-    plt.text(filtered_data['date'].iloc[0], 92, f"Giorni sopra il limite OMS nel 2023: {days_above_OMS_2023}")
-    plt.text(filtered_data['date'].iloc[0], 94, f"Giorni sopra il limite UE nel 2023: {days_above_EU_2023}")
-    plt.text(filtered_data['date'].iloc[0], 96, f"Giorni sopra la soglia d'allarme nel 2023: {days_above_alarm_2023}")
+    if annotation:
+        plt.text(filtered_data['date'].iloc[0], 92, f"Giorni sopra il limite OMS nel 2023: {days_above_OMS_2023}")
+        plt.text(filtered_data['date'].iloc[0], 94, f"Giorni sopra il limite UE nel 2023: {days_above_EU_2023}")
+        plt.text(filtered_data['date'].iloc[0], 96, f"Giorni sopra la soglia d'allarme nel 2023: {days_above_alarm_2023}")
 
-    plt.text(filtered_data['date'].iloc[0], 100, f"Giorni sopra il limite OMS nel 2024: {days_above_OMS_2024}")
-    plt.text(filtered_data['date'].iloc[0], 102, f"Giorni sopra il limite UE nel 2024: {days_above_EU_2024}")
-    plt.text(filtered_data['date'].iloc[0], 104, f"Giorni sopra la soglia d'allarme nel 2024: {days_above_alarm_2024}")
+        plt.text(filtered_data['date'].iloc[0], 100, f"Giorni sopra il limite OMS nel 2024: {days_above_OMS_2024}")
+        plt.text(filtered_data['date'].iloc[0], 102, f"Giorni sopra il limite UE nel 2024: {days_above_EU_2024}")
+        plt.text(filtered_data['date'].iloc[0], 104, f"Giorni sopra la soglia d'allarme nel 2024: {days_above_alarm_2024}")
 
-    plt.text(filtered_data['date'].iloc[0], 108, f"Giorni sopra il limite OMS nel 2025: {days_above_OMS_2025}")
-    plt.text(filtered_data['date'].iloc[0], 110, f"Giorni sopra il limite UE nel 2025: {days_above_EU_2025}")
-    plt.text(filtered_data['date'].iloc[0], 112, f"Giorni sopra la soglia d'allarme nel 2025: {days_above_alarm_2025}")
+        plt.text(filtered_data['date'].iloc[0], 108, f"Giorni sopra il limite OMS nel 2025: {days_above_OMS_2025}")
+        plt.text(filtered_data['date'].iloc[0], 110, f"Giorni sopra il limite UE nel 2025: {days_above_EU_2025}")
+        plt.text(filtered_data['date'].iloc[0], 112, f"Giorni sopra la soglia d'allarme nel 2025: {days_above_alarm_2025}")
 
-    plt.text(filtered_data['date'].iloc[450], 98, f"Media di PM2.5 nel 2023: {avg_2023:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
-    plt.text(filtered_data['date'].iloc[450], 106, f"Media di PM2.5 nel 2024: {avg_2024:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
+        plt.text(filtered_data['date'].iloc[450], 98, f"Media di PM2.5 nel 2023: {avg_2023:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
+        plt.text(filtered_data['date'].iloc[450], 106, f"Media di PM2.5 nel 2024: {avg_2024:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
 
 
     plt.yticks(range(0, int(filtered_data['Valore'].max()) + 5, 5))
@@ -500,12 +453,11 @@ def plot_air_quality_25_lombardia(data, city, start_date, end_date):
     plt.ylabel('Concentrazione PM2.5 (µg/m³)')
     plt.title(f'Inquinamento PM2.5 in {city} ({start_date} - {end_date})', pad=10)
 
-    plt.show()
+    if save==False:
+        plt.show()
 
 
-
-
-def plot_air_quality_pm10_lombardia(data, city, start_date, end_date):
+def plot_air_quality_pm10_lombardia(data, city, start_date, end_date, save=False, annotation=True):
     UE_limit = 45
     WHO_limit = 45
     alarm_limit = 90
@@ -525,36 +477,37 @@ def plot_air_quality_pm10_lombardia(data, city, start_date, end_date):
     days_above_alarm = filtered_data[filtered_data['Valore'] > alarm_limit].nunique()['Valore']
     days_above_OMS = filtered_data[filtered_data['Valore'] > WHO_limit].nunique()['Valore']
 
-    # Count number of days where in 2023
-    start_2023 = pd.to_datetime('01/01/2023').date()
-    end_2023 = pd.to_datetime('12/31/2023').date()
+    if annotation:
+        # Count number of days where in 2023
+        start_2023 = pd.to_datetime('01/01/2023').date()
+        end_2023 = pd.to_datetime('12/31/2023').date()
 
-    data_2023 = data[(data['date'] >= start_2023) & (data['date'] <= end_2023)]
-    days_above_EU_2023 = data_2023[data_2023['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2023 = data_2023[data_2023['Valore'] > alarm_limit].nunique()['Valore']
-    days_above_OMS_2023 = data_2023[data_2023['Valore'] > WHO_limit].nunique()['Valore']
+        data_2023 = data[(data['date'] >= start_2023) & (data['date'] <= end_2023)]
+        days_above_EU_2023 = data_2023[data_2023['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2023 = data_2023[data_2023['Valore'] > alarm_limit].nunique()['Valore']
+        days_above_OMS_2023 = data_2023[data_2023['Valore'] > WHO_limit].nunique()['Valore']
 
-    avg_2023 = data_2023['Valore'].mean()
+        avg_2023 = data_2023['Valore'].mean()
 
-    # Count number of days where in 2024
-    start_2024 = pd.to_datetime('01/01/2024').date()
-    end_2024 = pd.to_datetime('12/31/2024').date()
+        # Count number of days where in 2024
+        start_2024 = pd.to_datetime('01/01/2024').date()
+        end_2024 = pd.to_datetime('12/31/2024').date()
 
-    data_2024 = data[(data['date'] >= start_2024) & (data['date'] <= end_2024)]
-    days_above_EU_2024 = data_2024[data_2024['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2024 = data_2024[data_2024['Valore'] > alarm_limit].nunique()['Valore']
-    days_above_OMS_2024 = data_2024[data_2024['Valore'] > WHO_limit].nunique()['Valore']
+        data_2024 = data[(data['date'] >= start_2024) & (data['date'] <= end_2024)]
+        days_above_EU_2024 = data_2024[data_2024['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2024 = data_2024[data_2024['Valore'] > alarm_limit].nunique()['Valore']
+        days_above_OMS_2024 = data_2024[data_2024['Valore'] > WHO_limit].nunique()['Valore']
 
-    avg_2024 = data_2024['Valore'].mean()
+        avg_2024 = data_2024['Valore'].mean()
 
-    # Count number of days where in 2025
-    start_2025 = pd.to_datetime('01/01/2025').date()
-    end_2025 = pd.to_datetime('01/31/2025').date()
+        # Count number of days where in 2025
+        start_2025 = pd.to_datetime('01/01/2025').date()
+        end_2025 = pd.to_datetime('01/31/2025').date()
 
-    data_2025 = data[(data['date'] >= start_2025) & (data['date'] <= end_2025)]
-    days_above_EU_2025 = data_2025[data_2025['Valore'] > UE_limit].nunique()['Valore']
-    days_above_alarm_2025 = data_2025[data_2025['Valore'] > 50].nunique()['Valore']
-    days_above_OMS_2025 = data_2025[data_2025['Valore'] > WHO_limit].nunique()['Valore']
+        data_2025 = data[(data['date'] >= start_2025) & (data['date'] <= end_2025)]
+        days_above_EU_2025 = data_2025[data_2025['Valore'] > UE_limit].nunique()['Valore']
+        days_above_alarm_2025 = data_2025[data_2025['Valore'] > 50].nunique()['Valore']
+        days_above_OMS_2025 = data_2025[data_2025['Valore'] > WHO_limit].nunique()['Valore']
 
     # Calculate average value for each station
     average = filtered_data['Valore'].mean()
@@ -564,7 +517,7 @@ def plot_air_quality_pm10_lombardia(data, city, start_date, end_date):
     plt.plot(
         filtered_data['date'], 
         filtered_data['Valore'],
-        label=f'ARPA (media di 4 stazioni)',
+        label=f'ARPA (media di 91 stazioni)',
         linewidth=3
     )
 
@@ -589,21 +542,21 @@ def plot_air_quality_pm10_lombardia(data, city, start_date, end_date):
 
     plt.text(filtered_data['date'].iloc[90], 86, "Soglia proposta per l'allarme")
 
-    plt.text(filtered_data['date'].iloc[0], 104, f"Giorni sopra il limite OMS nel 2023: {days_above_OMS_2023}")
-    plt.text(filtered_data['date'].iloc[0], 107, f"Giorni sopra il limite UE nel 2023: {days_above_EU_2023}")
-    plt.text(filtered_data['date'].iloc[0], 110, f"Giorni sopra la soglia d'allarme nel 2023: {days_above_alarm_2023}")
+    if annotation:
+        plt.text(filtered_data['date'].iloc[0], 104, f"Giorni sopra il limite OMS nel 2023: {days_above_OMS_2023}")
+        plt.text(filtered_data['date'].iloc[0], 107, f"Giorni sopra il limite UE nel 2023: {days_above_EU_2023}")
+        plt.text(filtered_data['date'].iloc[0], 110, f"Giorni sopra la soglia d'allarme nel 2023: {days_above_alarm_2023}")
 
-    plt.text(filtered_data['date'].iloc[0], 115, f"Giorni sopra il limite OMS nel 2024: {days_above_OMS_2024}")
-    plt.text(filtered_data['date'].iloc[0], 118, f"Giorni sopra il limite UE nel 2024: {days_above_EU_2024}")
-    plt.text(filtered_data['date'].iloc[0], 121, f"Giorni sopra la soglia d'allarme nel 2024: {days_above_alarm_2024}")
+        plt.text(filtered_data['date'].iloc[0], 115, f"Giorni sopra il limite OMS nel 2024: {days_above_OMS_2024}")
+        plt.text(filtered_data['date'].iloc[0], 118, f"Giorni sopra il limite UE nel 2024: {days_above_EU_2024}")
+        plt.text(filtered_data['date'].iloc[0], 121, f"Giorni sopra la soglia d'allarme nel 2024: {days_above_alarm_2024}")
 
-    plt.text(filtered_data['date'].iloc[0], 126, f"Giorni sopra il limite OMS nel 2025: {days_above_OMS_2025}")
-    plt.text(filtered_data['date'].iloc[0], 129, f"Giorni sopra il limite UE nel 2025: {days_above_EU_2025}")
-    plt.text(filtered_data['date'].iloc[0], 132, f"Giorni sopra la soglia d'allarme nel 2025: {days_above_alarm_2025}")
+        plt.text(filtered_data['date'].iloc[0], 126, f"Giorni sopra il limite OMS nel 2025: {days_above_OMS_2025}")
+        plt.text(filtered_data['date'].iloc[0], 129, f"Giorni sopra il limite UE nel 2025: {days_above_EU_2025}")
+        plt.text(filtered_data['date'].iloc[0], 132, f"Giorni sopra la soglia d'allarme nel 2025: {days_above_alarm_2025}")
 
-    plt.text(filtered_data['date'].iloc[450], 108, f"Media di PM2.5 nel 2023: {avg_2023:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
-    plt.text(filtered_data['date'].iloc[450], 116, f"Media di PM2.5 nel 2024: {avg_2024:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
-
+        plt.text(filtered_data['date'].iloc[450], 108, f"Media di PM2.5 nel 2023: {avg_2023:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
+        plt.text(filtered_data['date'].iloc[450], 116, f"Media di PM2.5 nel 2024: {avg_2024:.2f} \n(limite UE: {UE_limit_annual}, limite OMS: {WHO_limit_annual})")
 
     plt.yticks(range(0, int(filtered_data['Valore'].max()) + 5, 5))
     plt.xticks(filtered_data['date'], rotation=45, ha='right', fontsize=8)
@@ -621,4 +574,5 @@ def plot_air_quality_pm10_lombardia(data, city, start_date, end_date):
     plt.ylabel('Concentrazione PM10 (µg/m³)')
     plt.title(f'Inquinamento PM10 in {city} ({start_date} - {end_date})', pad=10)
 
-    plt.show()
+    if save==False:
+        plt.show()
