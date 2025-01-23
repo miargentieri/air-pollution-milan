@@ -8,7 +8,7 @@ air_pollution_plots.zip
 
 data/data_export
 data/data_export.zip
-; data/
+plots/
 
 # C extensions
 *.so
