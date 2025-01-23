@@ -6,7 +6,9 @@ __pycache__/
 .DS_store
 air_pollution_plots.zip
 
-data/
+data/data_export
+data/data_export.zip
+; data/
 
 # C extensions
 *.so
