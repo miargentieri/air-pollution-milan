@@ -40,6 +40,32 @@ def pm25_sensors_avg(data):
     mean_milan.columns = ['date', 'Valore']
     return pm_data, mean_milan
 
+def pm25_sensors_yearly_avg(data):
+    # list of PM2.5 stations
+    stations = [17122, 20529, 10283]
+    # subset data to these Milan stations
+    pm_data = data[data['IdSensore'].isin(stations)].copy()
+    # Convert the datetime_column to datetime datatype
+    pm_data['date'] = pd.to_datetime(pm_data['Data'], format='%d/%m/%Y %I:%M:%S %p', dayfirst=True)
+    # Extract the year part
+    pm_data['year'] = pm_data['date'].dt.year
+    # make new empty column for station names
+    pm_data['Stazione'] = ''  
+    # Define the conditions and corresponding values
+    conditions = [
+        (pm_data['IdSensore'] == 17122),
+        (pm_data['IdSensore'] == 20529),
+        (pm_data['IdSensore'] == 10283)
+    ]
+    values = ['via Senato', 'viale Marche', 'Pascal Città Studi']
+    # Apply the conditions and values using .loc
+    for condition, value in zip(conditions, values):
+        pm_data.loc[condition, 'Stazione'] = value
+    # recode -9999.0 to NA
+    pm_data['Valore'] = np.where(pm_data['Valore'] == -9999.0, np.nan, pm_data['Valore'])
+    # Calculate yearly average for 'Valore'
+    mean_milan = pm_data.groupby('year', as_index=False)['Valore'].mean()
+    return pm_data, mean_milan
 
 def pm10_sensors_avg(data):
     # PM10 sensors
@@ -91,7 +117,18 @@ def calculate_sensor_avg(data, pm_stations):
     mean_pm_data.columns = ['date', 'Valore']
     return mean_pm_data
 
-
+def calculate_sensor_yearly_avg(data, pm_stations):
+    # Subset data for the specified PM2.5 stations
+    pm_data = data[data['IdSensore'].isin(pm_stations)].copy()
+    # Convert the datetime column to datetime datatype
+    pm_data['date'] = pd.to_datetime(pm_data['Data'], format='%d/%m/%Y %I:%M:%S %p', dayfirst=True)
+    # Extract the year
+    pm_data['year'] = pm_data['date'].dt.year
+    # Recode -9999.0 to NA
+    pm_data['Valore'] = np.where(pm_data['Valore'] == -9999.0, np.nan, pm_data['Valore'])
+    # Calculate yearly average for 'Valore'
+    mean_pm_data = pm_data.groupby('year', as_index=False)['Valore'].mean()
+    return mean_pm_data
 
 def plot_air_quality_25_milan(data, city, start_date, end_date, save=False, annotation=True):
     UE_limit = 25
